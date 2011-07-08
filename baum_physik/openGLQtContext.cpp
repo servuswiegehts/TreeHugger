@@ -411,6 +411,13 @@ void OpenGLQtContext::paintGL()
 	int texAngleVelo = glGetUniformLocation(calcRotProgram_->getID(), "angleVeloTex");
 	glUniform1i(texAngleVelo, 7);
 
+	int texPos = glGetUniformLocation(applyRotProgram_->getID(), "posTex");
+	glUniform1i(texPos, 8);	
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_BUFFER, posTex_);
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
+
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_BUFFER, childCountTex_);
 
@@ -449,6 +456,9 @@ void OpenGLQtContext::paintGL()
 	glBindTexture(GL_TEXTURE_BUFFER, 0);
 	
 	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_BUFFER, 0);
+
+	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_BUFFER, 0);
 
 	glActiveTexture(GL_TEXTURE4);
@@ -520,7 +530,7 @@ void OpenGLQtContext::paintGL()
 
 	int texParent = glGetUniformLocation(applyRotProgram_->getID(), "parent");
 	glUniform1i(texParent, 0);
-	int texPos = glGetUniformLocation(applyRotProgram_->getID(), "posTex");
+	texPos = glGetUniformLocation(applyRotProgram_->getID(), "posTex");
 	glUniform1i(texPos, 6);
 
 	glActiveTexture(GL_TEXTURE0);

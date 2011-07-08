@@ -18,6 +18,7 @@ uniform isamplerBuffer childIDsPlaceTex;
 uniform samplerBuffer kiTex;
 uniform samplerBuffer angleTex;
 uniform samplerBuffer angleVeloTex;
+uniform samplerBuffer posTex;
 //
 //
 in vec4 passColor[];
@@ -32,6 +33,8 @@ out vec4 outAngleVelo;
 out vec4 outKiForce;
 //
 in float passRadius[];
+
+out vec4 test;
 
 mat4 getRotMat(in vec3 vecc, in float angle)
 {
@@ -69,7 +72,7 @@ void main(void)
 	float l = 1.0; // length of branch
 	float m = 49.0; // mass of branch
 	
-	float my = 0.28; // determined by thickness of branch
+	float my = 28; // determined by thickness of branch
 
 
 	vec3 c = 0.5*(gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz); // Vector zum Schwerpunkt
@@ -88,19 +91,19 @@ void main(void)
 	//
 	//Restoration force
 	//
-	float k = 0.16; // rigidity of branch (determined by thickness)
-	vec3 passAngleNorm = vec3(1.0);
+	float k = 16; // rigidity of branch (determined by thickness)
+	vec3 oldOri = vec3(1.0);
 	
 	if (frameCount == 0)
 	{
-		passAngleNorm = normalize((posEnd - posStart).xyz);
+		oldOri = normalize((posEnd - posStart).xyz);
 	}
 	else
 	{
-		passAngleNorm = texelFetch(angleTex, 2*gl_PrimitiveIDIn).xyz;
+		oldOri = texelFetch(posTex, 2*gl_PrimitiveIDIn+1).xyz -  texelFetch(posTex, 2*gl_PrimitiveIDIn).xyz;
 	}
 
-	vec3 fK = k * ( normalize((gl_in[1].gl_Position - gl_in[0].gl_Position).xyz) - passAngleNorm);
+	vec3 fK = k * ( normalize((gl_in[1].gl_Position - gl_in[0].gl_Position).xyz) - oldOri);
 	//
 
 
@@ -109,17 +112,17 @@ void main(void)
 	//
 	vec3 angleVelo = texelFetch(angleVeloTex, gl_PrimitiveIDIn).xyz;
 	vec3 fR = (-1) * my * angleVelo * length(angleVelo);
-	if(length(fR) > length(angleVelo))
+	if(length(my * dot(angleVelo, angleVelo)) > length(angleVelo))
 	{
 		fR = (-1) * angleVelo;
 	}
-	
+	//
 
 	
 	//
 	//Back-propagation force
 	//	
-	float kc = 5.0;
+	float kc = 7.0;
 
 	vec3 fT = vec3(0.0);
 
@@ -134,13 +137,18 @@ void main(void)
 	fT *= (-1);
 	//
 
-	vec3 f = fR;// + fT + fK + fR;
-	vec3 alpha = cross(f,c)*3/(m*l*l);
 
+	vec3 f = fWind + fT + fK + fR;
+	vec3 alpha = cross(c,f)*3/(m*l*l);
+
+	vec3 passAngleNorm = texelFetch(angleTex, gl_PrimitiveIDIn).xyz;
+	
 	float frameTim = 20.0;
 	//TODO: anfangsangle in buffer eintragen
 	vec3 outAngleVelo3 = angleVelo + alpha * frameTim/1000;
 	vec3 outAngle3 = passAngleNorm + angleVelo * frameTim/1000 + 0.5 * alpha * (frameTim/1000)*(frameTim/1000);
+
+
 
 	outAngleVelo = vec4(outAngleVelo3, 0.0); //passAngleVelo[0] + vec4(angleAcc,1.0) * frameTime/1000;
 	//outAngleVelo = vec4(outAngleVelo.xyz, 0.0);
@@ -153,7 +161,6 @@ void main(void)
 
 	//int primitiveID = gl_PrimitiveIDIn;
 
-	vec4 newOri = outAngle;
 	mat4 rotMat = getRotMat(outAngle.xyz, length(outAngle.xyz));
 
 
@@ -182,8 +189,8 @@ void main(void)
 	//posStart = gl_in[0].gl_Position;// + vec4(1.0, 0.0, 0.0, 0.0);
 	//posEnd   = posStart + posLength * outAngleNorm;// + vec4(1.0, 0.0, 0.0, 0.0);
 
-	//gl_Position = vec4(passAngleNorm,3.0);
-	gl_Position = outAngle;
+	//gl_Position = vec4(alpha,3.0);
+	gl_Position = posStart;
 	EmitVertex();
 
 	//outAngleVelo = vec4(outAngleVelo3, 0.0); //passAngleVelo[0] + vec4(alpha,1.0) * frameTime/1000;
@@ -192,8 +199,8 @@ void main(void)
 	////outAngle = vec4(outAngle.xyz, 0.0);
 	//outKiForce = vec4(fK, 1.0);
 
-	//gl_Position = vec4(passAngleNorm,3.0);
-	gl_Position = outAngle;
+	//gl_Position = vec4(alpha,3.0);
+	gl_Position = posEnd;
 	EmitVertex();
 	EndPrimitive();
 
