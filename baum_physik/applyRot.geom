@@ -1,4 +1,4 @@
-#version 330
+#version 400
 //
 layout (lines) in;
 layout (triangle_strip) out;
