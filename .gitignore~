@@ -22,7 +22,6 @@
 *.gs~
 *.vs~
 
-
 # folder #
 ############
 debug
@@ -36,8 +35,6 @@ GeneratedFiles
 *.Debug
 *.Release
 *.
-moc_*
-_old.*
 
 # Packages #
 ############
