@@ -30,6 +30,7 @@ bin
 ipch
 release
 GeneratedFiles
+repo
 
 # other Visual Studio generated stuff #
 ######################################
