@@ -71,8 +71,6 @@ void main(void)
 	//
 	float l = 1.0; // length of branch
 	float m = 49.0; // mass of branch
-	
-	float my = 28; // determined by thickness of branch
 
 
 	vec3 c = 0.5*(gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz); // Vector zum Schwerpunkt
@@ -80,8 +78,8 @@ void main(void)
 	//
 	//Windkraft
 	//
-	float sigma = 17.2; // viscosity coefficient of air
-	vec3 v = vec3(0.7, 0.0, 0.0); // Velocity of wind
+	float sigma = 1.2; // viscosity coefficient of air
+	vec3 v = vec3(0.07, 0.0, 0.0); // Velocity of wind
 	float sA = 3.14159 * 1.0 * (passRadius[0] + passRadius[1]) ; // surface area of branch
 
 	vec3 fWind = sA * sigma * v;
@@ -91,26 +89,32 @@ void main(void)
 	//
 	//Restoration force
 	//
-	float k = 16; // rigidity of branch (determined by thickness)
-	vec3 oldOri = vec3(1.0);
-	
+	float k = 3.7; // rigidity of branch (determined by thickness)
+	//vec3 orien = vec3(0.0);
+	vec3 newOri = vec3(1.0);
+
 	if (frameCount == 0)
 	{
-		oldOri = normalize((posEnd - posStart).xyz);
+		newOri = (posEnd - posStart).xyz;
+		//orien = vec3(0.0);
 	}
 	else
 	{
-		oldOri = texelFetch(posTex, 2*gl_PrimitiveIDIn+1).xyz -  texelFetch(posTex, 2*gl_PrimitiveIDIn).xyz;
+		newOri = texelFetch(posTex, 2*gl_PrimitiveIDIn+1).xyz -  texelFetch(posTex, 2*gl_PrimitiveIDIn).xyz;
+		//orien = gl_in[1].gl_Position.xyz - texelFetch(posTex, 2*gl_PrimitiveIDIn+1).xyz;
+		//orien = vec3(0.0) - texelFetch(angleTex, 2*gl_PrimitiveIDIn).xyz;
 	}
 
-	vec3 fK = k * ( normalize((gl_in[1].gl_Position - gl_in[0].gl_Position).xyz) - oldOri);
+	vec3 fK = k * ( (gl_in[1].gl_Position - gl_in[0].gl_Position).xyz - newOri);
+	//vec3 fK = k * ( orien);
 	//
 
 
 	//
 	//Axial damping force
 	//
-	vec3 angleVelo = texelFetch(angleVeloTex, gl_PrimitiveIDIn).xyz;
+	float my = 8.28; // determined by thickness of branch
+	vec3 angleVelo = texelFetch(angleVeloTex, 2*gl_PrimitiveIDIn).xyz;
 	vec3 fR = (-1) * my * angleVelo * length(angleVelo);
 	if(length(my * dot(angleVelo, angleVelo)) > length(angleVelo))
 	{
@@ -122,7 +126,7 @@ void main(void)
 	//
 	//Back-propagation force
 	//	
-	float kc = 7.0;
+	float kc = 5;
 
 	vec3 fT = vec3(0.0);
 
@@ -137,22 +141,27 @@ void main(void)
 	fT *= (-1);
 	//
 
-
+	//vec3 f = vec3(0.0);
+	float ori = 0.0;
+	if (length(fWind) < length(fT+fK+fR))
+		ori = -1.0;
+	else
+		ori = 1.0;
 	vec3 f = fWind + fT + fK + fR;
 	vec3 alpha = cross(c,f)*3/(m*l*l);
 
-	vec3 passAngleNorm = texelFetch(angleTex, gl_PrimitiveIDIn).xyz;
+	vec3 passAngle = texelFetch(angleTex, gl_PrimitiveIDIn).xyz;
 	
-	float frameTim = 20.0;
+	float frameTim = 200.0;
 	//TODO: anfangsangle in buffer eintragen
 	vec3 outAngleVelo3 = angleVelo + alpha * frameTim/1000;
-	vec3 outAngle3 = passAngleNorm + angleVelo * frameTim/1000 + 0.5 * alpha * (frameTim/1000)*(frameTim/1000);
+	vec3 outAngle3 = passAngle + angleVelo * frameTim/1000 + 0.5 * alpha * (frameTim/1000)*(frameTim/1000);
 
 
 
 	outAngleVelo = vec4(outAngleVelo3, 0.0); //passAngleVelo[0] + vec4(angleAcc,1.0) * frameTime/1000;
 	//outAngleVelo = vec4(outAngleVelo.xyz, 0.0);
-	outAngle = vec4(normalize(outAngle3), 0.0); //passAngle[0] + passAngleVelo[0] * frameTime/1000 + 0.5*vec4(angleAcc,1.0)*(frameTime/1000)*(frameTime/1000);
+	outAngle = vec4((outAngle3), 0.0); //passAngle[0] + passAngleVelo[0] * frameTime/1000 + 0.5*vec4(angleAcc,1.0)*(frameTime/1000)*(frameTime/1000);
 	//outAngle = vec4(outAngle.xyz, 0.0);
 	outKiForce = vec4(fK, 1.0);
 
@@ -160,8 +169,12 @@ void main(void)
 	//vec4 posEnd = gl_in[1].gl_Position;
 
 	//int primitiveID = gl_PrimitiveIDIn;
-
-	mat4 rotMat = getRotMat(outAngle.xyz, length(outAngle.xyz));
+	//float rotAngle = 1.0;
+	//if (outAngle.z < 0)
+		//rotAngle = length(outAngle.xyz);
+	//else
+		//rotAngle = (-1) * length(outAngle.xyz);
+	mat4 rotMat = getRotMat(outAngleVelo.xyz, ori * length(outAngleVelo.xyz));
 
 
 	vec4 posRot = rotMat * (posEnd - posStart);
@@ -189,7 +202,7 @@ void main(void)
 	//posStart = gl_in[0].gl_Position;// + vec4(1.0, 0.0, 0.0, 0.0);
 	//posEnd   = posStart + posLength * outAngleNorm;// + vec4(1.0, 0.0, 0.0, 0.0);
 
-	//gl_Position = vec4(alpha,3.0);
+	//gl_Position = vec4(length(outAngle.xyz));
 	gl_Position = posStart;
 	EmitVertex();
 

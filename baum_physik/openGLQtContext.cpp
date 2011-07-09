@@ -484,7 +484,7 @@ void OpenGLQtContext::paintGL()
 	for (int i = 0; i < 4*20; i++)
 	{
 		std::cout << test[i] << " ";
-
+	
 		if (i % 4 == 3)
 			std::cout << std::endl;
 	}
