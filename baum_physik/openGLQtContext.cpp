@@ -982,22 +982,10 @@ bool OpenGLQtContext::initVertexArrayObject()
 	for (int i = 0; i < 2*size; ++i)
 	{
 		tfArray1[i] = 0.0f;
-
-		//
-		//if (i % 4 == 0)
-		//	tfArray1[i] = 10.0f;
-		//else if (i % 4 == 2)
-		//	tfArray1[i] = 0.0f;
 	}
 	for (int i = 0; i < 2*size; ++i)
 	{
 		tfArray2[i] = 0.0f;;
-
-		//
-		//if (i % 4 == 0)
-		//	tfArray2[i] = 10.0f;
-		//else if (i % 4 == 2)
-		//	tfArray2[i] = 0.0f;
 	}
 
 	float radienArray[10];
