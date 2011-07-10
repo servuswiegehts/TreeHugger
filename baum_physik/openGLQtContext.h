@@ -82,7 +82,7 @@ class OpenGLQtContext : public QGLWidget
 		unsigned int		vboID_[8];
 		unsigned int		iboID_[4];
 
-		unsigned int		tfID_[6];
+		unsigned int		tfID_[7];
 		unsigned int		tfoID_[2];
 		unsigned int		texBuf_[2];
 		unsigned int		texID_[2];
@@ -110,7 +110,7 @@ class OpenGLQtContext : public QGLWidget
 		unsigned int		angleTex_;
 		unsigned int		angleVeloTex_;
 		unsigned int		childIDsPlaceTex_;
-		unsigned int		posTex_;
+		unsigned int		posTex_[2];
 		unsigned int		tfTex_[4];
 
 		unsigned int		parentBuf_;

@@ -69,8 +69,8 @@ void main(void)
 	//
 	//Konstanten
 	//
-	float l = 1.0; // length of branch
-	float m = 49.0; // mass of branch
+	float l = length(posStart - posEnd); // length of branch
+	float m = 45.0; // mass of branch
 
 
 	vec3 c = 0.5*(gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz); // Vector zum Schwerpunkt
@@ -78,8 +78,8 @@ void main(void)
 	//
 	//Windkraft
 	//
-	float sigma = 1.2; // viscosity coefficient of air
-	vec3 v = vec3(0.07, 0.0, 0.0); // Velocity of wind
+	float sigma = 0.34; // viscosity coefficient of air
+	vec3 v = vec3(0.7, 0.0, 0.0); // Velocity of wind
 	float sA = 3.14159 * 1.0 * (passRadius[0] + passRadius[1]) ; // surface area of branch
 
 	vec3 fWind = sA * sigma * v;
@@ -89,7 +89,7 @@ void main(void)
 	//
 	//Restoration force
 	//
-	float k = 3.7; // rigidity of branch (determined by thickness)
+	float k = 5.37; // rigidity of branch (determined by thickness)
 	//vec3 orien = vec3(0.0);
 	vec3 newOri = vec3(1.0);
 
@@ -113,7 +113,7 @@ void main(void)
 	//
 	//Axial damping force
 	//
-	float my = 8.28; // determined by thickness of branch
+	float my = 3.28; // determined by thickness of branch
 	vec3 angleVelo = texelFetch(angleVeloTex, 2*gl_PrimitiveIDIn).xyz;
 	vec3 fR = (-1) * my * angleVelo * length(angleVelo);
 	if(length(my * dot(angleVelo, angleVelo)) > length(angleVelo))
@@ -126,7 +126,7 @@ void main(void)
 	//
 	//Back-propagation force
 	//	
-	float kc = 5;
+	float kc = 3.0;
 
 	vec3 fT = vec3(0.0);
 
@@ -150,18 +150,18 @@ void main(void)
 	vec3 f = fWind + fT + fK + fR;
 	vec3 alpha = cross(c,f)*3/(m*l*l);
 
-	vec3 passAngle = texelFetch(angleTex, gl_PrimitiveIDIn).xyz;
+	//vec3 passAngle = texelFetch(angleTex, 2*gl_PrimitiveIDIn+1).xyz;
 	
 	float frameTim = 200.0;
 	//TODO: anfangsangle in buffer eintragen
 	vec3 outAngleVelo3 = angleVelo + alpha * frameTim/1000;
-	vec3 outAngle3 = passAngle + angleVelo * frameTim/1000 + 0.5 * alpha * (frameTim/1000)*(frameTim/1000);
+	//vec3 outAngle3 = passAngle + angleVelo * frameTim/1000 + 0.5 * alpha * (frameTim/1000)*(frameTim/1000);
 
 
-
+	outAngle = vec4(0.0);
 	outAngleVelo = vec4(outAngleVelo3, 0.0); //passAngleVelo[0] + vec4(angleAcc,1.0) * frameTime/1000;
 	//outAngleVelo = vec4(outAngleVelo.xyz, 0.0);
-	outAngle = vec4((outAngle3), 0.0); //passAngle[0] + passAngleVelo[0] * frameTime/1000 + 0.5*vec4(angleAcc,1.0)*(frameTime/1000)*(frameTime/1000);
+	//outAngle = vec4((outAngle3), 0.0); //passAngle[0] + passAngleVelo[0] * frameTime/1000 + 0.5*vec4(angleAcc,1.0)*(frameTime/1000)*(frameTime/1000);
 	//outAngle = vec4(outAngle.xyz, 0.0);
 	outKiForce = vec4(fK, 1.0);
 
@@ -174,13 +174,13 @@ void main(void)
 		//rotAngle = length(outAngle.xyz);
 	//else
 		//rotAngle = (-1) * length(outAngle.xyz);
-	mat4 rotMat = getRotMat(outAngleVelo.xyz, ori * length(outAngleVelo.xyz));
+	mat4 rotMat = getRotMat(outAngleVelo.xyz, length(outAngleVelo.xyz));
 
 
 	vec4 posRot = rotMat * (posEnd - posStart);
 	posStart = gl_in[0].gl_Position;// + vec4(1.0, 0.0, 0.0, 0.0);
 	posEnd   = posStart + vec4(posRot.xyz, 0.0);// + vec4(1.0, 0.0, 0.0, 0.0);
-
+	//outAngle = posEnd - posStart;
 
 //
 	//int primitiveID = gl_PrimitiveIDIn;
@@ -205,13 +205,12 @@ void main(void)
 	//gl_Position = vec4(length(outAngle.xyz));
 	gl_Position = posStart;
 	EmitVertex();
-
 	//outAngleVelo = vec4(outAngleVelo3, 0.0); //passAngleVelo[0] + vec4(alpha,1.0) * frameTime/1000;
 	////outAngleVelo = vec4(outAngleVelo.xyz, 0.0);
 	//outAngle = vec4(outAngle3, 0.0); //passAngle[0] + passAngleVelo[0] * frameTime/1000 + 0.5*vec4(alpha,1.0)*(frameTime/1000)*(frameTime/1000);
 	////outAngle = vec4(outAngle.xyz, 0.0);
 	//outKiForce = vec4(fK, 1.0);
-
+	//outAngle = posEnd - posStart;
 	//gl_Position = vec4(alpha,3.0);
 	gl_Position = posEnd;
 	EmitVertex();

@@ -338,8 +338,13 @@ void OpenGLQtContext::paintGL()
 
 
 		//pos
-		glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, tfID_[5]);
-		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3, tfID_[5]);
+		glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, tfID_[6]);
+		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3, tfID_[6]);
+			
+		glActiveTexture(GL_TEXTURE8);
+		glBindTexture(GL_TEXTURE_BUFFER, posTex_[0]);
+		glBindBuffer(GL_TEXTURE_BUFFER, tfID_[5]);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
 
 
 
@@ -381,6 +386,11 @@ void OpenGLQtContext::paintGL()
 		glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, tfID_[5]);
 		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3, tfID_[5]);
 
+		glActiveTexture(GL_TEXTURE8);
+		glBindTexture(GL_TEXTURE_BUFFER, posTex_[1]);
+		glBindBuffer(GL_TEXTURE_BUFFER, tfID_[6]);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[6]);
+
 
 
 		//Ki-Force out
@@ -411,12 +421,9 @@ void OpenGLQtContext::paintGL()
 	int texAngleVelo = glGetUniformLocation(calcRotProgram_->getID(), "angleVeloTex");
 	glUniform1i(texAngleVelo, 7);
 
-	int texPos = glGetUniformLocation(applyRotProgram_->getID(), "posTex");
+	int texPos = glGetUniformLocation(calcRotProgram_->getID(), "posTex");
 	glUniform1i(texPos, 8);	
 
-	glActiveTexture(GL_TEXTURE8);
-	glBindTexture(GL_TEXTURE_BUFFER, posTex_);
-	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_BUFFER, childCountTex_);
@@ -458,12 +465,12 @@ void OpenGLQtContext::paintGL()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_BUFFER, 0);
 
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_BUFFER, 0);
+	
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_BUFFER, 0);
 
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_BUFFER, 0);
-		
 	glActiveTexture(GL_TEXTURE7);
 	glBindTexture(GL_TEXTURE_BUFFER, 0);
 
@@ -478,9 +485,12 @@ void OpenGLQtContext::paintGL()
 	//---------------------------------
 	//Bufferinhalt ausgeben
 	//
-	glBindBuffer(GL_ARRAY_BUFFER, tfID_[5]);
+	if (frameCount_ % 2 == 0)
+		glBindBuffer(GL_ARRAY_BUFFER, tfID_[6]);
+	else
+		glBindBuffer(GL_ARRAY_BUFFER, tfID_[5]);
 	float *test = (float*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
-
+	std::cout << "framecount: " << frameCount_ << std::endl;
 	for (int i = 0; i < 4*20; i++)
 	{
 		std::cout << test[i] << " ";
@@ -513,12 +523,20 @@ void OpenGLQtContext::paintGL()
 	if (frameCount_ % 2 == 0)
 	{
 		glBindVertexArray(vaoID_[0]);
+	
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_BUFFER, posTex_[1]);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[6]);
 
 		testi = 0;
 	}
 	else
 	{
 		glBindVertexArray(vaoID_[1]);
+
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_BUFFER, posTex_[0]);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
 
 		testi = 1;
 	}
@@ -535,10 +553,6 @@ void OpenGLQtContext::paintGL()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_BUFFER, parentTex_);		
-
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_BUFFER, posTex_);
-	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
 
 
 
@@ -1017,7 +1031,7 @@ unsigned int indexArray[18];
 
 	glGenVertexArrays(2, &vaoID_[0]);
 	glGenBuffers(2, &vboID_[0]);
-	glGenBuffers(6, &tfID_[0]);
+	glGenBuffers(7, &tfID_[0]);
 	glGenBuffers(2, &iboID_[0]);
 	glGenBuffers(1, &radBuf_);
 
@@ -1106,8 +1120,21 @@ unsigned int indexArray[18];
 	//
 	//Buffer um Output in Buffer/Texturen zu ueberpruefen
 	//
+
+	float posArray[80];
+
+	for(int i = 0; i < 80; ++i)
+	{
+		posArray[i] = 1.23f;
+	}
+
+
 	glBindBuffer(GL_ARRAY_BUFFER, tfID_[5]);
-	glBufferData(GL_ARRAY_BUFFER, 2*sizeof(vertexArray), NULL, GL_DYNAMIC_COPY);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(posArray), posArray, GL_DYNAMIC_COPY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, tfID_[6]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(posArray), posArray, GL_DYNAMIC_COPY);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -1134,7 +1161,7 @@ void OpenGLQtContext::genTree()
 	glGenTextures(1, &childIDsPlaceTex_);
 	glGenTextures(1, &kiTex_[0]);
 	glGenTextures(1, &kiTex_[1]);
-	glGenTextures(1, &posTex_);
+	glGenTextures(2, &posTex_[0]);
 	glGenTextures(1, &thickTex_);
 	glGenTextures(4, &tfTex_[0]);
 
@@ -1363,7 +1390,7 @@ void OpenGLQtContext::genTree()
 	glBindBuffer(GL_TEXTURE_BUFFER, kiBuf_[0]);
 	glBufferData(GL_TEXTURE_BUFFER, sizeof(kiArrayBuf), kiArrayBuf, GL_DYNAMIC_COPY);
 
-	glTexBuffer(GL_TEXTURE_BUFFER, GL_R32F, kiBuf_[0]);
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, kiBuf_[0]);
 //
 
 
@@ -1377,7 +1404,7 @@ void OpenGLQtContext::genTree()
 	glBindBuffer(GL_TEXTURE_BUFFER, kiBuf_[1]);
 	glBufferData(GL_TEXTURE_BUFFER, sizeof(kiArrayBuf), kiArrayBuf, GL_DYNAMIC_COPY);
 
-	glTexBuffer(GL_TEXTURE_BUFFER, GL_R32F, kiBuf_[1]);
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, kiBuf_[1]);
 //
 
 
@@ -1407,12 +1434,17 @@ void OpenGLQtContext::genTree()
 //
 // position (neue, nach drehung(
 //
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_BUFFER, posTex_);
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_BUFFER, posTex_[0]);
 	glBindBuffer(GL_TEXTURE_BUFFER, tfID_[5]);
 
 	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[5]);
-//
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_BUFFER, posTex_[1]);
+	glBindBuffer(GL_TEXTURE_BUFFER, tfID_[6]);
+
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, tfID_[6]);
 
 
 
