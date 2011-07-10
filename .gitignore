@@ -63,6 +63,7 @@ _old.*
 *.ilk
 *.tlog
 *.opensdf
+*.suo
 
 # OS generated files #
 ######################
