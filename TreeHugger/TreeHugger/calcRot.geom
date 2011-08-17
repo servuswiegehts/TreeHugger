@@ -27,26 +27,10 @@ uniform isamplerBuffer childCountTex;
 uniform isamplerBuffer childIDsTex;
 uniform isamplerBuffer childIDsPlaceTex;
 uniform samplerBuffer kiTex;
-
-uniform samplerBuffer angleTex;
-
-
 //
-//
-in vec4 passColor[];
-out vec4 outColor;
-//
-in vec4 passAngle[];
-in vec4 passAngleVelo[];
-in vec4 passKiForce[];
-//
-out vec4 outAngle;
 out vec4 outAngleVelo;
 out vec4 outKiForce;
 //
-in float passRadius[];
-
-out vec4 test;
 
 
 
@@ -183,11 +167,8 @@ void main(void)
 		//TODO: anfangsangle in buffer eintragen
 		vec3 outAngleVelo3 = angleVelo + alpha *frameTime/1000;
 
-
-		outAngle = vec4(0.0);
 		outAngleVelo = vec4(outAngleVelo3, 0.0);
 		outKiForce = vec4(fK, 1.0);
-
 
 		mat4 rotMat = getRotMat(outAngleVelo.xyz, length(outAngleVelo.xyz));
 		vec4 posRot = rotMat * (gl_in[1].gl_Position - gl_in[0].gl_Position);

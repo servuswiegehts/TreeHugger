@@ -129,21 +129,6 @@ void	Shader::init (std::string VsFile, std::string GsFile, std::string FsFile)
 		delete[] FsText;
 	}
 
-	//TODO ersetzen durch layout... in shader
-	glBindAttribLocation(shaderID, 0, "inPosition");
-	glBindAttribLocation(shaderID, 1, "inColor");
-
-	glBindAttribLocation(shaderID, 2, "inRadius");
-
-	glBindAttribLocation(shaderID, 3, "inAngle");
-	glBindAttribLocation(shaderID, 4, "inAngleVelo");
-
-	glBindAttribLocation(shaderID, 5, "inChildCount");
-
-	glBindAttribLocation(shaderID, 6, "inTexCoord");
-
-	glBindAttribLocation(shaderID, 7, "inDir");
-
 	glLinkProgram (shaderID);
 
 #ifdef _DEBUG

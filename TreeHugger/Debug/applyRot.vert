@@ -1,8 +1,8 @@
 #version 400
 //
-in vec4 inPosition;
-in float inRadius;
-in vec4 inDir;
+layout(location = 0) in vec4 inPosition;
+layout(location = 2) in float inRadius;
+layout(location = 3) in vec4 inDir;
 //
 out float passRadius;
 out vec4 passDir;

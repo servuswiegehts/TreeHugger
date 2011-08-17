@@ -2,7 +2,7 @@
 //
 layout (lines) in;
 layout (triangle_strip) out;
-layout (max_vertices = 80) out;
+layout (max_vertices = 60) out;
 //
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;

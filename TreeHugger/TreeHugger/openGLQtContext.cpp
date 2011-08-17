@@ -1365,8 +1365,8 @@ void OpenGLQtContext::initTree(std::string treeString)
 
 		glBindBuffer(GL_ARRAY_BUFFER, dirBuf_);
 		glBufferData(GL_ARRAY_BUFFER, dirArray.size()*sizeof(float), &(dirArray[0]), GL_STATIC_DRAW);
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(7);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(3);
 
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, baumIBO_);
