@@ -2,9 +2,7 @@
 ###################
 *.com
 *.class
-*.dll
 *.lib
-*.exe
 *.o
 *.obj
 *.so
@@ -25,10 +23,8 @@
 
 # folder #
 ############
-debug
 bin
 ipch
-release
 GeneratedFiles
 repo
 

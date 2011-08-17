@@ -1,0 +1,12 @@
+Baum
+{
+length: 6;
+angle: 45;
+axiom: FF;
+production: F=0.1,F[+&F];
+production: F=0.2,F[+^F][-&F];
+production: F=0.2,F[^-F][&+F];
+production: F=0.2,F[^-F][&+F];
+production: F=0.2,F[&-F][^+F];
+production: F=0.1,F[^-F];
+}
