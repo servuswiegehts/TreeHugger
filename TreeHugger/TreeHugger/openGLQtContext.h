@@ -228,14 +228,14 @@ class OpenGLQtContext : public QGLWidget
 		//
 		// Teller
 		unsigned int	tellerVAO_;
-		unsigned int	teller_ver_Buf_;
-		unsigned int	teller_tex_Buf_;
-		unsigned int	teller_ind_Buf_;
+		unsigned int	tellerVerBuf_;
+		unsigned int	tellerTexBuf_;
+		unsigned int	tellerIndBuf_;
 		//
 		unsigned int	kreisVAO_;
-		unsigned int	kreis_ver_Buf_;
-		unsigned int	kreis_tex_Buf_;
-		unsigned int	kreis_ind_Buf_;
+		unsigned int	kreisVerBuf_;
+		unsigned int	kreisTexBuf_;
+		unsigned int	kreisIndBuf_;
 		//
 		unsigned int	indexTellerCount_;
 		unsigned int	indexKreisCount_;

@@ -1,6 +1,8 @@
 #include"cylinder.h"
 
 
+
+//------------------------------------C'tor D'tor------------------------
 Cylinder::Cylinder():
 		von_				(),
 		nach_				(),
@@ -134,20 +136,9 @@ Cylinder::Cylinder(glm::vec4 von, glm::vec4 nach,glm::vec4 richtung,glm::vec4 ri
 		indexArray_[i+1]=(j+1)%(numVertices_+1);
 		indexArray_[i+2]=(numVertices_+j+1)%((numVertices_*2));
 		++j;
-		//std::cout<<indexArray_[i]<<";"<<indexArray_[i+1]<<";"<<indexArray_[i+2]<<";"<<std::endl;
+		
 	}
 
-	/*for(int i=0; i < numVertices_ ; ++i)
-	{
-		indexArray_.push_back(2*numVertices_);
-		indexArray_.push_back(numVertices_+i);
-		indexArray_.push_back(numVertices_+i+1);
-	}
-		indexArray_.push_back(2*numVertices_);
-		indexArray_.push_back(numVertices_);
-		indexArray_.push_back(numVertices_*2 -1);*/
-		
-		
 		
 }
 
@@ -164,12 +155,15 @@ Cylinder::Cylinder(glm::vec4 von, glm::vec4 nach,glm::vec4 richtung,glm::vec4 ri
 		richtung1_			(richtung),
 		richtung2_			(richtung_alt)
 		
-{
-	
-		}
+{}
+
+Cylinder::~Cylinder()
+{}
+
+//-----------------------------------------------------------------------
 
 
-
+//Übersetzt die übergebenen Radien-Iteratoren in Float-Werte
 void Cylinder::set_vertex()
 {
 		
@@ -179,78 +173,7 @@ void Cylinder::set_vertex()
 
 	radius1_=rad1_->second.rad;
 	radius2_=rad2_->second.rad;
-	
 
-	//kreispunkt1=glm::vec4(radius1_,0,radius1_,1);
-
-
-		//von2=-von_;
-
-		//for(int j=0;j<numVertices_;++j)
-		//{
-		//	glm::vec3 kreispunkt_temp(kreispunkt1.x,kreispunkt1.y,kreispunkt1.z);
-
-		//
-		//	kreispunkt_temp=glm::rotate(kreispunkt_temp,angle,glm::vec3(richtung2_.x,richtung2_.y,richtung2_.z));
-		//	modelMatrix_ = glm::translate(modelMatrix_, glm::vec3(-0.5f, 2.0f, 0.0f));  // Create our model matrix
-		//	modelMatrix_ = glm::scale(modelMatrix_, glm::vec3(0.5f, 0.5f, 0.5f));  // Create our model matrix
-		//	modelMatrix_ = glm::rotate(modelMatrix_, 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));  // Create our model matrix
-		//	kreispunkt1.x=kreispunkt_temp.x;
-		//	kreispunkt1.y=kreispunkt_temp.y;
-		//	kreispunkt1.z=kreispunkt_temp.z;
-
-		//	bildpunkt=kreispunkt1-von2;
-		//	
-
-		//	vertex_.push_back(bildpunkt.x);
-		//	vertex_.push_back(bildpunkt.y);
-		//	vertex_.push_back(bildpunkt.z);
-		//	vertex_.push_back(1);
-	
-		//	color_.push_back(1);
-		//	color_.push_back(0);
-		//	color_.push_back(0);
-		//	color_.push_back(1);
-		//	
-		//	tex_.push_back(float(j%20)/float(19));
-		//	tex_.push_back(0.0f);
-		//}
-	
-
-
-		/*kreispunkt2=glm::vec4(radius2_,0,radius2_,1);
-
-		nach2=-nach_;
-		for(int j=0;j<numVertices_;++j)
-		{
-			
-			glm::vec3 kreispunkt_temp(kreispunkt2.x,kreispunkt2.y,kreispunkt2.z);
-
-		
-					kreispunkt_temp=glm::rotate(kreispunkt_temp,angle,glm::vec3(richtung1_.x,richtung1_.y,richtung1_.z));
-			
-		
-			kreispunkt2.x=kreispunkt_temp.x;
-			kreispunkt2.y=kreispunkt_temp.y;
-			kreispunkt2.z=kreispunkt_temp.z;
-
-			bildpunkt=kreispunkt2-nach2;
-			
-			vertex_.push_back(bildpunkt.x);
-			vertex_.push_back(bildpunkt.y);
-			vertex_.push_back(bildpunkt.z);
-			vertex_.push_back(1);
-
-			color_.push_back(1);
-			color_.push_back(1);
-			color_.push_back(1);
-			color_.push_back(1);
-	
-			tex_.push_back(float(j%20)/float(19));
-			tex_.push_back(1.0f);
-			
-		}*/
-	//std::cout<<von_.x<<" : "<<von_.y<<" : "<<von_.z<<std::endl;
 	vertex_.push_back(von_.x);
 	vertex_.push_back(von_.y);
 	vertex_.push_back(von_.z);
@@ -278,3 +201,88 @@ void Cylinder::set_vertex()
 
 
 }
+
+
+//----------------------------Getter-------------------------------------
+glm::vec4 Cylinder::getNach() const 
+{
+	return nach_;
+}
+
+glm::vec4 Cylinder::getVon() const 
+{
+	return von_;
+}
+
+glm::vec4 Cylinder::getRichtung1() const 
+{
+	return richtung1_;		
+}
+
+glm::vec4 Cylinder::getRichtung2() const 
+{
+	return richtung2_;
+}
+
+float Cylinder::getRadius1() const 
+{
+	return radius1_;
+}
+
+float Cylinder::getRadius2() const 
+{
+	return radius2_;
+}
+
+int	Cylinder::getNumVertices() const 
+{
+	return numVertices_;
+}
+
+std::vector<float> Cylinder::getVertexVector() const 
+{
+	return vertex_;
+}
+
+std::vector<float> Cylinder::getColorVector() const 
+{
+	return color_;
+}
+
+std::vector<float> Cylinder::getTexVector() const 
+{
+	return tex_;
+}
+
+std::vector<unsigned int> Cylinder::getIndexArray() const 
+{
+	return indexArray_;
+}
+
+//-----------------------------------------------------------------------
+
+
+
+
+//-------------------------------Setter----------------------------------
+void Cylinder::setRadius1(float const& to_set)
+{
+	radius1_=to_set;
+}
+
+void Cylinder::setRadius2(float const& to_set)
+{
+	radius2_=to_set;
+}
+
+void Cylinder::setRad_1_Pointer(std::map<std::string, RadDir>::iterator const& to_set)
+{
+	rad1_ = to_set;
+}
+
+void Cylinder::setRad_2_Pointer(std::map<std::string, RadDir>::iterator const& to_set)
+{
+	rad2_ = to_set;
+}
+
+//-----------------------------------------------------------------------

@@ -31,36 +31,56 @@ class tree {
 
 	public:
 
-		tree										(void);
-		tree										(int,float,float);
-		
-		int											get_num_vertices();
-		int											get_indeces();
-		void										drawTree(std::string);
+//--------------------------------C'tor D'tor---------------------------------------------
+
+		tree										();
+		tree										( int , float , float );
+		~tree										();
+
+//----------------------------------------------------------------------------------------
+
+	
+		void										drawTree( std::string );
 		void										set();
 		void										flush();
-		void										kill_tree();
-		void										set_length(float);
-		void										set_angle(float);
-		void										make_leaf(glm::vec4,glm::vec4,int);
-		int											get_num_cylinders(void);
-		int											get_leafs();
-		std::string									cylinder_ID(glm::vec4, glm::vec4);
-		std::string									vertex_ID(glm::vec4);
-		std::vector<float>							get_vertices(void);
-		std::vector<float>							get_colors(void);
-		std::vector<float>							get_texture(void);
-		std::vector<unsigned int>					get_indices(void);
-		std::vector<float>							get_radien();
-		std::vector<float>							get_dir();
-		tree										operator=(const tree &);	
-		std::map<int, Cylinder*> const*					getCylinder();
+		void										killTree();
+		std::string									cylinderID( glm::vec4 , glm::vec4 );
+		std::string									vertexID( glm::vec4 );
 		
 		
 
+//--------------------------------------Getter--------------------------------------------
+
+		int											getNumVertices()		const;
+		int											getIndeces()			const;
+		int											getNumCylinders()		const;
+		std::vector<float>							getVertices()			const;
+		std::vector<float>							getColors()				const;
+		std::vector<float>							getTexture()			const;
+		std::vector<unsigned int>					getIndices()			const;
+		std::vector<float>							getRadien()				const;
+		std::vector<float>							getDirection()			const;
+		std::map<int, Cylinder*> const*				getCylinder()			;
+
+//-----------------------------------------------------------------------------------------
 
 
-//	private:
+//----------------------------------------Setter-------------------------------------------
+
+		void										setLength( float const& );
+		void										setAngle(  float const& );
+
+//-----------------------------------------------------------------------------------------
+
+//--------------------------------------Operatoren-----------------------------------------
+		
+		tree										operator=(  tree const& );	
+//----------------------------------------------------------------------------------------
+
+//--------------------------------------Member Variablen-----------------------------------
+
+	private:
+		int											itera;
 		int											vertex_;
 		int											num_;
 		int											flag_;
@@ -72,10 +92,6 @@ class tree {
 		std::vector<float>							vertexArray_;
 		std::vector<float>							radArray_;
 		std::vector<float>							dirArray_;
-		std::vector<float>							leaf_Vertex_Array_;
-		std::vector<float>							leaf_Color_Array_;
-		std::vector<unsigned int>					leaf_Index_Array_;
-		std::vector<float>							leaf_Texture_Array_;
 		std::vector<float>							colorArray_;
 		std::vector<float>							textureArray_;
 		std::vector<unsigned int>					indexArray_;
@@ -83,6 +99,9 @@ class tree {
 		std::map<std::string,RadDir>				oldradius_;
 		std::map<std::string,Cylinder>::iterator	it_1_;
 		std::map<std::string,RadDir>::iterator		it_2_;
+
+//-----------------------------------------------------------------------------------------
+
 
 };
 

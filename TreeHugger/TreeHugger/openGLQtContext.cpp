@@ -191,14 +191,14 @@ OpenGLQtContext::OpenGLQtContext(QGLFormat* context, QWidget *parent) :
 		//
 		// Teller
 		tellerVAO_        (),
-		teller_ver_Buf_   (),
-		teller_tex_Buf_   (),
-		teller_ind_Buf_   (),
+		tellerVerBuf_   (),
+		tellerTexBuf_   (),
+		tellerIndBuf_   (),
 		//
 		kreisVAO_         (),
-		kreis_ver_Buf_    (),
-		kreis_tex_Buf_    (),
-		kreis_ind_Buf_    (),
+		kreisVerBuf_    (),
+		kreisTexBuf_    (),
+		kreisIndBuf_    (),
 		//
 		indexTellerCount_ (),
 		indexKreisCount_  (),
@@ -1023,7 +1023,7 @@ void OpenGLQtContext::keyPressEvent(QKeyEvent* event)
 					break;
 
 		case Qt::Key_N:
-					std::cout<<"QGL: Anzahl Zylinder: " << currentTree_.get_num_cylinders()<<std::endl;
+					std::cout<<"QGL: Anzahl Zylinder: " << currentTree_.getNumCylinders()<<std::endl;
 					std::cout<<"QGL: Laenge String: " << currentTreeString_.length()<<std::endl;
 					std::cout<<"QGL: Groesse String: " << float(currentTreeString_.length())/1024.0f/1024.0f <<" MB"<<std::endl;
 					break;
@@ -1279,11 +1279,11 @@ void OpenGLQtContext::initTree(std::string treeString)
 //----------------------------
 	if(calcTreeGrowth_ == 1)
 	{
-		vertexArrayVector_.push_back(currentTree_.get_vertices());
-		indexArrayVector_.push_back(currentTree_.get_indices());
+		vertexArrayVector_.push_back(currentTree_.getVertices());
+		indexArrayVector_.push_back(currentTree_.getIndices());
 		
-		radArrayVector_.push_back(currentTree_.get_radien());
-		dirArrayVector_.push_back(currentTree_.get_dir());
+		radArrayVector_.push_back(currentTree_.getRadien());
+		dirArrayVector_.push_back(currentTree_.getDirection());
 	}
 
 	std::vector<float> const& vertexArray = vertexArrayVector_[iteration_];
@@ -1292,7 +1292,7 @@ void OpenGLQtContext::initTree(std::string treeString)
 	std::vector<float> const& radArray = radArrayVector_[iteration_];
 	std::vector<float> const& dirArray = dirArrayVector_[iteration_];
 
-	std::cout << "QGL: Die Zylinder wurden berechnet, Anzahl Zylinder: " << vertexArray.size()/8 << "/" << currentTree_.get_num_cylinders() << std::endl << "QGL: Berechne Eltern-Kind-Beziehung...\n";
+	std::cout << "QGL: Die Zylinder wurden berechnet, Anzahl Zylinder: " << vertexArray.size()/8 << "/" << currentTree_.getNumCylinders() << std::endl << "QGL: Berechne Eltern-Kind-Beziehung...\n";
 	
 	vertexCount_ = vertexArray.size();
 	indexCount_ = indexArray.size();
@@ -1411,7 +1411,7 @@ void OpenGLQtContext::genTree()
 		{
 			for (std::map<int, Cylinder*>::const_iterator j = cylMapCurrent->begin(); j != cylMapCurrent->end(); ++j)
 			{
-				if ( glm::length(i->second->von_ - j->second->nach_) <= 0.001 )
+				if ( glm::length(i->second->getVon() - j->second->getNach()) <= 0.001 )
 				{
 					(*parentArrayBuf)[i->first] = j->first;
 					parent = TRUE;
@@ -1563,7 +1563,7 @@ void OpenGLQtContext::genTree()
 
 		for (std::map<int,Cylinder*>::const_iterator i = cylMapCurrent->begin(); i != cylMapCurrent->end(); ++i)
 		{
-			(*thickArrayBuf)[i->first] = (i->second->radius2_);
+			(*thickArrayBuf)[i->first] = (i->second->getRadius2());
 		}
 		thicknessArrayVector_.push_back(thickArrayBuf);
 		//
@@ -1666,134 +1666,133 @@ void OpenGLQtContext::genTree()
 }
 //
 
+// Erstellt den Wiesenuntergrund des Baumes
 void OpenGLQtContext::make_teller()
 {
-	Cylinder c(glm::vec4(0,-2,0,1),glm::vec4(0,0.1,0,1),glm::vec4(0,1,0,0),glm::vec4(0,1,0,0),13.0f,13.0f,90);
+	Cylinder c( glm::vec4( 0 , -2 , 0 , 1 ) , glm::vec4( 0 , 0.1 , 0 , 1 ) , glm::vec4( 0 , 1 , 0 , 0 ) , glm::vec4( 0 , 1 , 0 , 0 ) , 13.0f , 13.0f , 90 );
 
 	std::vector<float> vertexArray;
 	std::vector<float> texArray;
 	std::vector<unsigned int> indexArray;
 
-	std::vector<float> vertexArray_kreis;
-	std::vector<float> texArray_kreis;
-	std::vector<unsigned int> indexArray_kreis;
+	std::vector<float> vertexArrayKreis;
+	std::vector<float> texArrayKreis;
+	std::vector<unsigned int> indexArrayKreis;
 
-	vertexArray=  c.vertex_;
-	indexArray = c.indexArray_;
-	texArray = c.tex_;
+	vertexArray =  c.getVertexVector();
+	indexArray  = c.getIndexArray();
+	texArray = c.getTexVector();
 	indexTellerCount_ = indexArray.size();
 
-	glActiveTexture(GL_TEXTURE13);
-	glBindTexture(GL_TEXTURE_2D, bodenTex_);
+	glActiveTexture( GL_TEXTURE13 );
+	glBindTexture( GL_TEXTURE_2D , bodenTex_ );
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 395, 230, 0, GL_RGB, GL_FLOAT, tellerdata_);
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D( GL_TEXTURE_2D , 0 , GL_RGB , 395 , 230 , 0 , GL_RGB , GL_FLOAT , tellerdata_ );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_REPEAT );
 	
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	
+	glGenVertexArrays( 1 , &tellerVAO_ );
+	glGenBuffers( 1 , &tellerVerBuf_ );
+	glGenBuffers( 1 , &tellerTexBuf_ );
+	glGenBuffers( 1 , &tellerIndBuf_ );
 
-
-
-	glGenVertexArrays(1,&tellerVAO_);
-	glGenBuffers(1, &teller_ver_Buf_);
-	glGenBuffers(1, &teller_tex_Buf_);
-	glGenBuffers(1,&teller_ind_Buf_);
-
-	glBindVertexArray(tellerVAO_);
+	glBindVertexArray( tellerVAO_ );
 		
-		glBindBuffer(GL_ARRAY_BUFFER,teller_ver_Buf_);
-		glBufferData(GL_ARRAY_BUFFER,sizeof(float)*vertexArray.size(),&(vertexArray[0]),GL_STATIC_DRAW);
-		glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,0);
-		glEnableVertexAttribArray(0);
+	glBindBuffer( GL_ARRAY_BUFFER , tellerVerBuf_ );
+	glBufferData( GL_ARRAY_BUFFER , sizeof(float) * vertexArray.size() , &(vertexArray[0]) , GL_STATIC_DRAW );
+	glVertexAttribPointer( 0 , 4 , GL_FLOAT , GL_FALSE , 0 , 0 );
+	glEnableVertexAttribArray( 0 );
 	
-		glBindBuffer(GL_ARRAY_BUFFER,teller_tex_Buf_);
-		glBufferData(GL_ARRAY_BUFFER,sizeof(float)*texArray.size(),&(texArray[0]),GL_STATIC_DRAW);
-		glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,0,0);
-		glEnableVertexAttribArray(1);
+	glBindBuffer( GL_ARRAY_BUFFER , tellerTexBuf_ );
+	glBufferData( GL_ARRAY_BUFFER , sizeof(float) * texArray.size() , &(texArray[0]) , GL_STATIC_DRAW );
+	glVertexAttribPointer( 1 , 2 , GL_FLOAT , GL_FALSE , 0 , 0 );
+	glEnableVertexAttribArray( 1 );
 	
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,teller_ind_Buf_);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(float)*indexArray.size(),&(indexArray[0]),GL_STATIC_DRAW);
-
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER , tellerIndBuf_ );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER , sizeof(float) * indexArray.size() , &(indexArray[0]) , GL_STATIC_DRAW);
+	
 	glBindVertexArray(0);
 
-
-	glm::vec4 kreispunkt2 = glm::vec4(c.radius2_,0,c.radius2_,1);
+	glm::vec4 kreispunkt2 = glm::vec4( c.getRadius2() , 0 , c.getRadius2() , 1 );
 	
-	glm::vec4 nach = c.nach_;
-	glm::vec4 nach2=-nach, bildpunkt;
-	float angle = 360.0f/90.0f;
+	glm::vec4 nach = c.getNach();
+	glm::vec4 nach2 = -nach , bildpunkt;
 
-	for(int j = 0; j < 90; ++j)
+	float angle = 360.0f / 90.0f;
+
+	for( int j = 0 ; j < 90 ; ++j )
 	{
-		glm::vec3 kreispunkt_temp(kreispunkt2.x,kreispunkt2.y,kreispunkt2.z);
+		glm::vec3 kreispunkt_temp( kreispunkt2.x , kreispunkt2.y , kreispunkt2.z );
 
-		kreispunkt_temp=glm::rotate(kreispunkt_temp,angle,glm::vec3(c.richtung1_.x,c.richtung1_.y,c.richtung1_.z));
+		kreispunkt_temp = glm::rotate( kreispunkt_temp , angle , glm::vec3( c.getRichtung1().x , c.getRichtung1().y , c.getRichtung1().z ) );
 			
-		kreispunkt2.x=kreispunkt_temp.x;
-		kreispunkt2.y=kreispunkt_temp.y;
-		kreispunkt2.z=kreispunkt_temp.z;
+		kreispunkt2.x = kreispunkt_temp.x;
+		kreispunkt2.y = kreispunkt_temp.y;
+		kreispunkt2.z = kreispunkt_temp.z;
 
-		bildpunkt=kreispunkt2-nach2;
+		bildpunkt = kreispunkt2 - nach2;
 			
-		vertexArray_kreis.push_back(bildpunkt.x);
-		vertexArray_kreis.push_back(bildpunkt.y);
-		vertexArray_kreis.push_back(bildpunkt.z);
-		vertexArray_kreis.push_back(1);
+		vertexArrayKreis.push_back( bildpunkt.x );
+		vertexArrayKreis.push_back( bildpunkt.y );
+		vertexArrayKreis.push_back( bildpunkt.z );
+		vertexArrayKreis.push_back( 1 );
 
-		bildpunkt = glm::normalize(bildpunkt);
-		texArray_kreis.push_back(bildpunkt.x);
-		texArray_kreis.push_back(bildpunkt.z);
+		bildpunkt = glm::normalize( bildpunkt );
+		texArrayKreis.push_back( bildpunkt.x );
+		texArrayKreis.push_back( bildpunkt.z );
 	}
 
-		vertexArray_kreis.push_back(nach.x);
-		vertexArray_kreis.push_back(nach.y);
-		vertexArray_kreis.push_back(nach.z);
-		vertexArray_kreis.push_back(1);
+		vertexArrayKreis.push_back( nach.x );
+		vertexArrayKreis.push_back( nach.y );
+		vertexArrayKreis.push_back( nach.z );
+		vertexArrayKreis.push_back( 1 );
 
 
-	for(int i = 0; i < 90 ; ++i)
+	for( int i = 0 ; i < 90 ; ++i )
 	{
-		indexArray_kreis.push_back(i);
-		indexArray_kreis.push_back(90);
-		indexArray_kreis.push_back(i+1);
+		indexArrayKreis.push_back( i );
+		indexArrayKreis.push_back( 90 );
+		indexArrayKreis.push_back( i+1 );
 	}
-		indexArray_kreis.push_back(89);
-		indexArray_kreis.push_back(90);
-		indexArray_kreis.push_back(0);
+		indexArrayKreis.push_back( 89 );
+		indexArrayKreis.push_back( 90 );
+		indexArrayKreis.push_back( 0 );
 
-	indexKreisCount_ = indexArray_kreis.size();
+	indexKreisCount_ = indexArrayKreis.size();
 
-	glActiveTexture(GL_TEXTURE14);
-	glBindTexture(GL_TEXTURE_2D, grasTex_);
+	glActiveTexture( GL_TEXTURE14 );
+	glBindTexture( GL_TEXTURE_2D , grasTex_ );
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 450, 0, GL_RGB, GL_FLOAT, grasdata_);
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D( GL_TEXTURE_2D , 0 , GL_RGB , 600 , 450 , 0 , GL_RGB , GL_FLOAT , grasdata_ );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_REPEAT);
 	
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
 
 
-	glGenVertexArrays(1,&kreisVAO_);
-	glGenBuffers(1, &kreis_ver_Buf_);
-	glGenBuffers(1, &kreis_tex_Buf_);
-	glGenBuffers(1,&kreis_ind_Buf_);
+	glGenVertexArrays( 1 , &kreisVAO_ );
+	glGenBuffers( 1 , &kreisVerBuf_ );
+	glGenBuffers( 1 , &kreisTexBuf_ );
+	glGenBuffers( 1 , &kreisIndBuf_ );
 
-	glBindVertexArray(kreisVAO_);
+	glBindVertexArray( kreisVAO_ );
 	
-		glBindBuffer(GL_ARRAY_BUFFER,kreis_ver_Buf_);
-		glBufferData(GL_ARRAY_BUFFER,sizeof(float)*vertexArray_kreis.size(),&(vertexArray_kreis[0]),GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
-	
-		glBindBuffer(GL_ARRAY_BUFFER,kreis_tex_Buf_);
-		glBufferData(GL_ARRAY_BUFFER,sizeof(float)*texArray_kreis.size(),&(texArray_kreis[0]),GL_STATIC_DRAW);
-		glVertexAttribPointer(1 ,2 ,GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(1);
-	
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,kreis_ind_Buf_);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(float)*indexArray_kreis.size(),&(indexArray_kreis[0]),GL_STATIC_DRAW);
+	glBindBuffer( GL_ARRAY_BUFFER , kreisVerBuf_ );
+	glBufferData( GL_ARRAY_BUFFER , sizeof(float) * vertexArrayKreis.size() , &(vertexArrayKreis[0]) , GL_STATIC_DRAW );
+	glVertexAttribPointer( 0 , 4 , GL_FLOAT , GL_FALSE , 0 , 0 );
+	glEnableVertexAttribArray( 0 );
+
+	glBindBuffer( GL_ARRAY_BUFFER , kreisTexBuf_ );
+	glBufferData( GL_ARRAY_BUFFER , sizeof(float) * texArrayKreis.size() , &(texArrayKreis[0]) , GL_STATIC_DRAW );
+	glVertexAttribPointer( 1 , 2 , GL_FLOAT , GL_FALSE , 0 , 0 );
+	glEnableVertexAttribArray( 1 );
+
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER , kreisIndBuf_ );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER , sizeof(float) * indexArrayKreis.size() , &(indexArrayKreis[0]) , GL_STATIC_DRAW );
 
 	glBindVertexArray(0);
 }
@@ -1803,18 +1802,18 @@ void OpenGLQtContext::killTree(std::string new_file)
 {
 	std::cout << "QGL: Baum wird geloescht...\n";
 	filename_ = new_file;
-	calcTreeGrowth_= 1;
-	currentTree_.kill_tree();
-	iteration_ = 0;
+	calcTreeGrowth_ = 1;
+	currentTree_.killTree();
+	iteration_  = 0;
 	TreeHugger_.erase_old();
-	TreeHugger_.parse_lsystem(filename_.c_str(),5);
-	currentTree_=tree(2,TreeHugger_.get_angle(),TreeHugger_.get_length());
-	currentTreeString_=TreeHugger_.get_axiom();
+	TreeHugger_.parse_lsystem( filename_.c_str() , 5 );
+	currentTree_ = tree( 2 , TreeHugger_.get_angle() , TreeHugger_.get_length() );
+	currentTreeString_ = TreeHugger_.get_axiom();
 
-    vertexArrayVector_ =std::vector<std::vector<float> >();
-    indexArrayVector_ =std::vector<std::vector<unsigned int> >();
-    dirArrayVector_ =std::vector<std::vector<float> >();
-    radArrayVector_ =std::vector<std::vector<float> >();
+    vertexArrayVector_ = std::vector<std::vector<float> >();
+    indexArrayVector_ = std::vector<std::vector<unsigned int> >();
+    dirArrayVector_ = std::vector<std::vector<float> >();
+    radArrayVector_ = std::vector<std::vector<float> >();
 
 
 	for (std::vector<std::vector<int>* >::iterator i = parentArrayVector_.begin(); i != parentArrayVector_.end(); ++i)
