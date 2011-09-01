@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\AMD APP\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include;3rdparty\oscpack\osc;3rdparty\oscpack\ip;3rdparty\oscpack;include;3rdparty\tuio;GeneratedFiles;C:\include;C:\include\boost;C:\include\boost_1_46_1;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\AMD APP\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include;3rdparty\oscpack\osc;3rdparty\oscpack\ip;3rdparty\oscpack;include;3rdparty\tuio;GeneratedFiles;C:\include;C:\include\boost;C:\include\boost_1_46_1;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level2</WarningLevel>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\AMD APP\lib\x86;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\lib\Win32;lib;C:\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\AMD APP\lib\x86;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\lib\Win32;lib;C:\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ws2_32.lib;winmm.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;glew32d.lib;DevIL.lib;opencl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>false</PerUserRedirection>
@@ -70,7 +70,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>3rdparty\oscpack\osc;3rdparty\oscpack\ip;3rdparty\oscpack;3rdparty\tuio;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include;GeneratedFiles;C:\include\boost;C:\Program Files %28x86%29\AMD APP\include;C:\include;C:\include\boost_1_46_1;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\AMD APP\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include;3rdparty\oscpack\osc;3rdparty\oscpack\ip;3rdparty\oscpack;include;3rdparty\tuio;GeneratedFiles;C:\include;C:\include\boost;C:\include\boost_1_46_1;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level2</WarningLevel>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
@@ -78,7 +78,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>lib;C:\Program Files %28x86%29\AMD APP\lib\x86;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\lib\Win32;C:\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\AMD APP\lib\x86;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\lib\Win32;lib;C:\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>qtmain.lib;QtCore4.lib;QtGui4.lib;QtOpenGL4.lib;glew32.lib;DevIL.lib;opencl.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -138,7 +138,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\3rdparty\tuio" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\GeneratedFiles" "-IC:\include\boost" "-IC:\Program Files (x86)\AMD APP\include" "-IC:\include" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "mainWindow.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-IC:\Program Files\AMD APP\include" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\include" "-I.\3rdparty\tuio" "-I.\GeneratedFiles" "-IC:\include" "-IC:\include\boost" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "mainWindow.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
     </CustomBuild>
     <ClInclude Include="ocl.h" />
     <CustomBuild Include="qtuio.h">
@@ -149,7 +149,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\3rdparty\tuio" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\GeneratedFiles" "-IC:\include\boost" "-IC:\Program Files (x86)\AMD APP\include" "-IC:\include" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "qtuio.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-IC:\Program Files\AMD APP\include" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\include" "-I.\3rdparty\tuio" "-I.\GeneratedFiles" "-IC:\include" "-IC:\include\boost" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "qtuio.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
     </CustomBuild>
     <ClInclude Include="shader.h" />
     <ClInclude Include="tree.h" />
@@ -161,7 +161,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\3rdparty\tuio" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\GeneratedFiles" "-IC:\include\boost" "-IC:\Program Files (x86)\AMD APP\include" "-IC:\include" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "openGLQtContext.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_DLL  "-I." "-IC:\Program Files\AMD APP\include" "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v4.0\include" "-I.\3rdparty\oscpack\osc" "-I.\3rdparty\oscpack\ip" "-I.\3rdparty\oscpack" "-I.\include" "-I.\3rdparty\tuio" "-I.\GeneratedFiles" "-IC:\include" "-IC:\include\boost" "-IC:\include\boost_1_46_1" "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I." "-I." "-I." "openGLQtContext.h" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
