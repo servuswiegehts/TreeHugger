@@ -27,15 +27,15 @@ struct Daten
 
 
 
-class tree {
+class Tree {
 
 	public:
 
 //--------------------------------C'tor D'tor---------------------------------------------
 
-		tree										();
-		tree										( int , float , float );
-		~tree										();
+		Tree										();
+		Tree										( int , float , float );
+		~Tree										();
 
 //----------------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ class tree {
 //--------------------------------------Getter--------------------------------------------
 
 		int											getNumVertices()		const;
-		int											getIndeces()			const;
+		int											getNumIndices()			const;
 		int											getNumCylinders()		const;
 		std::vector<float>							getVertices()			const;
 		std::vector<float>							getColors()				const;
@@ -74,7 +74,7 @@ class tree {
 
 //--------------------------------------Operatoren-----------------------------------------
 		
-		tree										operator=(  tree const& );	
+		Tree										operator=(  Tree const& );	
 //----------------------------------------------------------------------------------------
 
 //--------------------------------------Member Variablen-----------------------------------

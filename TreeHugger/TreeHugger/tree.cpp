@@ -4,7 +4,7 @@
 
 
 //--------------------------------C'tor D'tor----------------------------
-tree::tree():
+Tree::Tree():
 
 	alpha_			((10*PI)/180),
 	height_			(3),
@@ -18,7 +18,7 @@ tree::tree():
 {}
 
 
-tree::tree( int num , float alpha , float laenge ):
+Tree::Tree( int num , float alpha , float laenge ):
 
 	num_			(num),
 	flag_			(0),
@@ -32,13 +32,13 @@ tree::tree( int num , float alpha , float laenge ):
 {}
 	
 
-tree::~tree()
+Tree::~Tree()
 {}
 
 //-----------------------------------------------------------------------
 
 //Erstellt aus dem übergebenen String einen Baum 
-void tree::drawTree(std::string a)
+void Tree::drawTree(std::string a)
 {
 
 	Cylinder cyl , temp;
@@ -340,7 +340,7 @@ void tree::drawTree(std::string a)
 }
 
 //Übersetzt die Radienzeiger in Float-Werte
-void tree::set()
+void Tree::set()
 {
 	int count = 0;
 	Cylinder cyl;
@@ -381,7 +381,7 @@ void tree::set()
 }
 
 //Leert die Tree-Vektoren 
-void  tree::flush()
+void  Tree::flush()
 {
 	vertexArray_	= std::vector<float>();
 	radArray_		= std::vector<float>();
@@ -392,7 +392,7 @@ void  tree::flush()
 }
 
 //Setzt den gesamten Baum auf Anfang zurück
-void  tree::killTree()
+void  Tree::killTree()
 {
 	vertexArray_	= std::vector<float>();
 	colorArray_		= std::vector<float>();
@@ -408,7 +408,7 @@ void  tree::killTree()
 }
 
 //Erstellt aus Startpunkt und Richtung eine eindeutige Zylinder-ID
-std::string  tree::cylinderID(glm::vec4 von, glm::vec4 nach)
+std::string  Tree::cylinderID(glm::vec4 von, glm::vec4 nach)
 {
 	int a_1 = ( unsigned int ) ( von.x * 100000 );
 	int b_1 = ( unsigned int ) ( von.y * 100000 );
@@ -436,7 +436,7 @@ std::string  tree::cylinderID(glm::vec4 von, glm::vec4 nach)
 }
 
 //Erstellt aus einem Punkt eine eindeutige Vertex-ID
-std::string  tree::vertexID(glm::vec4 nach)
+std::string  Tree::vertexID(glm::vec4 nach)
 {
 	
 	int a_2 = ( unsigned int ) ( nach.x * 100000 );
@@ -460,61 +460,61 @@ std::string  tree::vertexID(glm::vec4 nach)
 
 //-------------------------------Getter----------------------------------
 
-int  tree::getNumVertices() const 
+int  Tree::getNumVertices() const 
 {
 	return vertex_;
 }
 
 
-std::vector<unsigned int> tree::getIndices() const
+std::vector<unsigned int> Tree::getIndices() const
 {
 		return indexArray_;
 }
 
 
-int tree::getNumCylinders() const
+int Tree::getNumCylinders() const
 {
 	return oldcylinder_.size();
 }
 
 
-std::vector<float> tree::getVertices() const
+std::vector<float> Tree::getVertices() const
 {
 		return vertexArray_;
 }
 
 
-std::vector<float> tree::getColors() const
+std::vector<float> Tree::getColors() const
 {
 		return colorArray_;
 }
 
 
-std::vector<float> tree::getTexture() const
+std::vector<float> Tree::getTexture() const
 {
 		return textureArray_;
 }
 
 
-int tree::getIndeces() const
+int Tree::getNumIndices() const
 {
 	return indexArray_.size();
 }
 
 
-std::vector<float> tree::getRadien() const
+std::vector<float> Tree::getRadien() const
 {
 		return radArray_;
 }
 
 
-std::vector<float> tree::getDirection() const
+std::vector<float> Tree::getDirection() const
 {
 		return dirArray_;
 }
 
 
-std::map<int, Cylinder*>const* tree::getCylinder() 
+std::map<int, Cylinder*>const* Tree::getCylinder() 
 {
 	int zaehler = 0;
 	std::map<int , Cylinder*>* cylmap = new std::map<int , Cylinder*>();
@@ -532,13 +532,13 @@ std::map<int, Cylinder*>const* tree::getCylinder()
 //---------------------------Setter--------------------------------------
 
 
-void tree::setLength(float const& length_new)
+void Tree::setLength(float const& length_new)
 {
 	height_ = length_new;
 }
 
 
-void tree::setAngle(float const& angle_new)
+void Tree::setAngle(float const& angle_new)
 {
 	alpha_ = ( angle_new * PI ) / 180;
 }
@@ -547,16 +547,17 @@ void tree::setAngle(float const& angle_new)
 
 //---------------------------Operatoren----------------------------------
 
-tree tree::operator = ( tree const& other)
+Tree Tree::operator = ( Tree const& other)
 {
 	
 
-	this -> alpha_	 = other.alpha_;
-	this -> height_	 = other.height_;
-	this -> num_	 = other.num_;
-	this -> radius_	 = other.radius_;
-	this -> radius2_ = other.radius2_;
-	this -> flag_	 = other.flag_;
+	this -> alpha_		 = other.alpha_;
+	this -> height_		 = other.height_;
+	this -> num_		 = other.num_;
+	this -> radius_		 = other.radius_;
+	this -> radius2_	 = other.radius2_;
+	this -> oldcylinder_ = other.oldcylinder_;
+	this -> oldradius_	 = other.oldradius_;
 
 	return *this;
 
