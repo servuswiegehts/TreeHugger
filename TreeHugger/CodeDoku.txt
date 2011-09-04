@@ -1,0 +1,200 @@
+Die Klasse Tree
+
+Die Klasse Tree ist für die erstellung des Baumes zuständig. Sie verwaltet übersetzt den String des Parsers und erstellt die passenden Zylinder. Sie verwaltet die Radien und erstellt die Arrays für die Buffer.
+
+Konstruktoren, Destruktor:
+
+		Tree();
+		Tree( int ,float, float );
+		~Tree();
+
+Memberfunktionen:
+
+		void 				drawTree( std::string );
+		void 				set();
+		void 				flush();
+		void 				killtree();
+		std::string			cylinderID( glm::vec4 , glm::vec4 );
+		std::string			vertexID( glm::vec4 );
+
+	Getter:
+
+		int				getNumVertices()		const;
+		int				getIndeces()			const;
+		int				getNumCylinders()		const;
+		std::vector<float>		getVertices()			const;
+		std::vector<float>		getColors()			const;
+		std::vector<float>		getTexture()			const;
+		std::vector<unsigned int>	getIndices()			const;
+		std::vector<float>		getRadien()			const;
+		std::vector<float>		getDirection()			const;
+		std::map<int, Cylinder*> const*	getCylinder()			;
+
+	
+	Setter:
+		
+		void				setLength( float const& );
+		void				setAngle(  float const& );
+
+	Operatoren:
+
+		Tree				operator=(  Tree const& );
+	
+Membervariablen:
+
+	
+		int						itera;
+		int						vertex_;
+		int						num_;
+		int						flag_;
+		int						flags_[6];
+		float						alpha_;
+		float						radius_;
+		float						radius2_;
+		float						height_;
+		std::vector<float>				vertexArray_;
+		std::vector<float>				radArray_;
+		std::vector<float>				dirArray_;
+		std::vector<float>				colorArray_;
+		std::vector<float>				textureArray_;
+		std::vector<unsigned int>			indexArray_;
+		std::map<std::string,Cylinder>			oldcylinder_;
+		std::map<std::string,RadDir>			oldradius_;
+		std::map<std::string,Cylinder>::iterator	it_1_;
+		std::map<std::string,RadDir>::iterator		it_2_;
+
+
+
+Tree() 
+
+Der Defaultkonstruktor erstellt ein Baumobjekt mit Standardwerten.
+
+
+Tree( int ,float, float )
+
+Dieser Konstuktor nimmt drei Parameter entgegen. Der erste Parameter gibt die Anzahl der Flächen an welche ein Zylinder besitzt. Derzeit werden für jeden Zylinder lediglich 2 Flächen unterstützt. Da ein Zylinder ab auch aus mehr als Grund- und Deckfläche bestehen kann, sind hier auch höhere Werte denkbar. 
+Der zweite Wert gibt den Winkel ( alpha_ ) an welcher bei einem Richtungswechsel der Turtle vorgenommen wird. Der Winkel wird dabei als Gradzahl übergeben und im Konstruktor ins Bogenmaß übersetzt.
+Der dritte Parameter gibt die Startlänge ( height_ ) der Zylinder an. 
+Desweiteren initialisiert der Konstruktor die Membervariablen flag_, flags_, radius_, radius2_ und itera.
+
+~Tree() 
+
+Der Defaultdestruktor wird derzeit nicht verwendet.
+
+
+void drawTree( std::string )
+
+Diese Funktion erstellt aus einem String den Baum. Sie bewegt die Turtle entsprechend der Zeichenkette und füllt die Zylinder-Map und die Radien-Map.
+Die Zeichenkette wird mithilfe einer For-Schleife und einer Switch-Case Anweisung untersucht.
+Wird ein F erkannt, so wird überprüft ob die Zylinder bereits vorhanden sind. Ist das der Fall so wird der Zeiger auf den Radius der Deckfläche in der Radius-Map dereferenziert und der Wert erhöht. Zusätzlich wird einmal pro Iteration der Radius der Grundfläche des Stammes erhöht, da hier kein Zylinder andockt.
+Ist der Zylinder nicht vorhanden, so kann es sein das sein Startpunkt bereits da ist ( der Endpunkt eines anderen bereits vorhandenen Zylinders ). Also wird ebenfalls die Radien-Map durchsucht. Sollte der Punkt bereits vorhanden sein, so kann der passende Zeiger auf den Radius zur Erstellung des Zylinders genutzt werden.
+Nur wenn weder der Zylinder noch der Startpunkt schon existieren, wird ein neuer Zylinder mit einem Zeiger auf den  Standard Radius 0.1 in der Radien-Map an beiden Enden erstellt.
+
+Auch die Datenstruktur Daten und ein  passender Stack wird von der DrawTree Funktion genutzt. Sie sind notwendig um die Operatoren [] aus der Zeichenkette Richtig auswerten zu können.
+Desweiteren verkürzt sie die Länge der Zylinder nach jedem Durchgang.
+
+Bei jedem Aufruf der Funktion wird die Membervariable itera_ erhöht. 
+
+
+void set()
+
+Die set() Funktion wird aufgerufen um die Zeiger auf die Radien zu dereferenzieren. In ihr wird die set_vertex() Funktion der Cylinder Klasse aufgerufen, welche die Zahlwerte des Radien für jeden Zylinder ermittelt.
+Desweiteren dient die set() Funktion dafür die Arrays für die späteren Buffer zu füllen. Das sind die Membervariablen vertexArray_ , indexArray_ , dirArray_ , radArray und colorArray_. Außerdem wird in der Funktion die Membervariable vertex_ gesetzt.
+
+
+void flush()
+
+Die Funktion flush() dient dazu nach einem vollendeten Zeichenprozess die Arrays des Baumes wieder zu leeren um sie durch eine neue Zeichenkette füllen zu lassen.
+
+void killTree()
+
+killTree() dient dazu den aktuellen Baum zurück zu setzen. dabei wird wie bei flush() alle Arrays geleert. Zusätzlich dazu werden auch die Zylinder-Map oldcylinder_ und die Radien-Map oldradius_ gelöscht. die beiden Membervariablen radius_ und radius2_ werden auf ihren Anfangswert 0.1 gesetzt.
+
+
+
+std::string cylinderID( glm::vec4 , glm::vec4 )
+
+Gibt eine ID zurück welche aus den Zwei übergebenen Vektoren berechnet wird. Dabei wird jede Koordinate mit 1000 multipliziert und mithilfe eines Stringstreams in einen String geschriben welcher dann zurück gegeben wird.
+
+
+std::string vertexID( glm::vec4 )
+
+Gibt eine ID zurück welche aus dem übergebenem Vektor berechnet wird. Dabei wird jede Koordinate mit 1000 multipliziert und mithilfe eines Stringstreams in einen String geschriben welcher dann zurück gegeben wird.
+
+
+
+Getter:
+
+int getNumVertices() const
+
+Gibt die Anzahl der Punkte des Baumes zurück. Wobei hier je die beiden Mittelpunkte der Zylinder gemeint sind.
+
+
+std::vector<unsigned int> getIndices() const
+
+Gibt den Vektor indexArray_ zurück, welcher die Indices der Punkte beinhaltet.
+
+
+int getNumCylinders() const
+
+Gibt die Anzahld der Zylinder im Baum zurück
+
+
+std::vector<float> getVertices() const
+
+Gibt den Vektor mit den Koordinaten der Punkte zurück.
+
+
+std::vector<float> getColors() const
+
+Gibt den Vektor mit den Farbwerten der Punkte zurück.
+
+
+std::vector<float> getTexture() const
+
+Gibt den Vektor mit den Texturkoordinaten zurück.
+
+
+int getNumIndices() const
+
+Gibt die Anzahl der Punkte im IndexArray_ zurück.
+
+
+std::vector<float> getRadien() const
+
+Gibt den Vektor radArray_ zurück. Dieser beinhaltet alle Radien der Zylinder.
+
+
+std::vector<float> getDirection() const
+
+Gibt den Vektor dirArray_ zurück. Dieser beinhaltet alle Richtungskoordinaten der Zylinder.
+
+
+std::map<int, Cylinder*>const* getCylinder() 
+
+Gibt einen Zeiger auf eine Map mit Zeigern auf alle Zylinder zurück. Hierbei ist der Key der Map durchnummeriert von 0 - Anzahl der Zylinder.
+
+
+
+
+Setter:
+
+void setLength( float const& length_new )
+
+setLength setzt eine neue Länge der Zylinder. Dabei wird der Wert von height_ durch den Wert von length_new ersetzt. .
+
+
+void setAngle ( float const& angle_new )
+
+setAngle setzt einen neuen Winkel für die Drehung der Zylinder durch die Zeichenkette. Dabei wird der Wert von alpha_ durch den von angle_new ersetzt.
+
+
+
+Operatoren:
+
+Tree operator = ( Tree const& other)
+
+Hier wird der = Operator so überladen das man Bäume über diesen Operator ersetzen kann. Dabei werden die Membervariablen alpha_, heigth_, num_, radius_ und radius2_, oldcylinder_ und oldradius_ ersetzt.
+
+
+
