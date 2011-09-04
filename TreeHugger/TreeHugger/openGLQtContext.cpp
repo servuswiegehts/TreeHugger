@@ -560,7 +560,7 @@ void OpenGLQtContext::initScene()
 
 
 	TreeHugger_.parse_lsystem(filename_.c_str(),5);
-	currentTree_=tree(2,TreeHugger_.get_angle(),TreeHugger_.get_length());
+	currentTree_=Tree(2,TreeHugger_.get_angle(),TreeHugger_.get_length());
 	
 	
 	//
@@ -1807,7 +1807,7 @@ void OpenGLQtContext::killTree(std::string new_file)
 	iteration_  = 0;
 	TreeHugger_.erase_old();
 	TreeHugger_.parse_lsystem( filename_.c_str() , 5 );
-	currentTree_ = tree( 2 , TreeHugger_.get_angle() , TreeHugger_.get_length() );
+	currentTree_ = Tree( 2 , TreeHugger_.get_angle() , TreeHugger_.get_length() );
 	currentTreeString_ = TreeHugger_.get_axiom();
 
     vertexArrayVector_ = std::vector<std::vector<float> >();

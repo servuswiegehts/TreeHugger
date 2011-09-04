@@ -120,7 +120,7 @@ class OpenGLQtContext : public QGLWidget
 		//
 		std::string		filename_;
 		std::string		currentTreeString_;
-		tree			currentTree_;
+		Tree			currentTree_;
 		Lsystem			TreeHugger_;
 		//
 		bool			calcTreeGrowth_;
